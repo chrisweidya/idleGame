@@ -1,0 +1,70 @@
+/*.transition(@transition) {
+  -webkit-transition: @transition;
+-moz-transition: @transition;
+-o-transition: @transition;
+transition: @transition;
+}
+.opacity(@opacity) {
+  opacity: @opacity / 100;
+  filter: ~"alpha(opacity=@{opacity})";
+}
+
+a {
+.transition(all 0.4s);
+&:hover {
+  .opacity(70);
+  }
+}
+
+// Selector interpolation only works in 1.3.1+. Try it!
+@theGoodThings: ~".food, .beer, .sleep, .javascript";
+
+@{theGoodThings} {
+  font-weight: bold;
+}
+*/
+
+@col-width: 33%;
+
+@light-yellow: #f9e486;
+
+@base-padding: 5px;
+
+@bar-bg-color: gray;
+@bar-fg-color: green;
+@bar-height: 5px;
+
+.color(@color) {
+}
+
+.border {
+	border-style: solid;
+}
+
+.padding(@paddingSize) {
+	padding: @paddingSize;
+}
+
+.width(@width){
+	width: @width;
+}
+
+.box {
+	background-color: @light-yellow;
+}
+
+.left-container {
+  	.width(@col-width);
+  	.border;
+  	.padding(@base-padding);
+}
+
+.bar-bg {
+	background-color: @bar-bg-color;
+
+}
+
+.bar-fg {
+	background-color: @bar-fg-color;
+	height: @bar-height;
+}

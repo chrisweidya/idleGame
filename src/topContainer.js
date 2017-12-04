@@ -9,7 +9,7 @@ export default class TopContainer extends React.Component {
 		super(props);
 		this.state = {
 			gold: 0,
-			messages: ["fds", "fdsf", "fsd"]
+			messages: ["It's a hot sunny day.", "You take your fishing pole and cast it out.", "Ah, nothing like a day of fishing."]
 		};
 		this.messageSize = 3;
 	}

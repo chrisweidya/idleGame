@@ -1,15 +1,17 @@
 import React from 'react';
-import Box from './box.js';
+import FishCreator from './fishCreator.js';
 
 const inventoryContainerClassName = "right container";
+const fishItemClassName = "fish-item";
 
 export default class InventoryContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
+			location: props.location,
 			title: props.title,
-			gold: props.gold,
+			gold: 0,
 			maxWeight: 5,
 			currentWeight: 0,
 			fishes: {}
@@ -17,12 +19,30 @@ export default class InventoryContainer extends React.Component {
 	}
 
 	componentDidMount() {
+		/*
+		let fishes = this.state.fishes;
+		fishes["Angel Fish"] = 2;
+		this.setState({
+			fishes: fishes
+		})
+		*/
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("hi", nextProps.gold);
+	}
+
+	sellFish(fishName, count) {
+		let fishes = this.state.fishes;
+		fishes[fishName] = 0;
 		this.setState({
-			gold: nextProps.gold
+			fishes: fishes
+		});
+		this.updateGold(FishCreator.getFishGold(fishName)*count);
+	}
+
+	updateGold(val) {
+		this.setState({
+			gold: this.state.gold += val
 		});
 	}
 
@@ -32,6 +52,9 @@ export default class InventoryContainer extends React.Component {
 			fishes[fish.name] = 1;
 		else
 			fishes[fish.name] += 1;
+		this.setState({
+			fishes: fishes
+		});
 	}
 
 	createInventoryContainer() {
@@ -53,7 +76,20 @@ export default class InventoryContainer extends React.Component {
 	createFishList() {
 		let fishes = Object.entries(this.state.fishes);
 		fishes = fishes.map((fish, index) => {
-			return (<p key={fish[0] + fish[1]}> {fish[0] + ": " + fish[1]}</p>);
+			if(fish[1] === 0)
+				return;
+			if(this.state.location === "fishing")
+				return (
+					<div key={fish[0] + fish[1]} className={fishItemClassName}>
+						<p>{fish[0] + ": " + fish[1]}</p>
+					</div>
+				);
+			else if(this.state.location === "market") 
+				return (
+					<div key={fish[0] + fish[1] + "button"} className={fishItemClassName}>
+						<button onClick={this.sellFish.bind(this, fish[0], fish[1])}> {"Sell " + fish[1] + " " + fish[0]} </button>
+					</div>
+				);
 		});
 		return fishes;
 	}

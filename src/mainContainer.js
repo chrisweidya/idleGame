@@ -3,15 +3,20 @@ import Box from './box.js';
 import TopContainer from './topContainer.js';
 import InventoryContainer from './inventoryContainer.js';
 import VerticalContainer from './verticalContainer.js';
+import FishingContainer from './FishingContainer.js';
 
-const mainContainerClassName = "main container"
+const mainContainerClassName = "main container";
+const locations = {
+	fishing: "fishing",
+	market: "market"
+};
 
 export default class MainContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			gold: 0
+			location: locations.market
 		}
 	}
 
@@ -19,10 +24,7 @@ export default class MainContainer extends React.Component {
 	}
 
 	updateGold(val) {
-		console.log("fsaf", this.state.gold);
-		this.setState({
-			gold: this.state.gold + val
-		});
+		this.refs.inventory.updateGold(val);
 	}
 
 	updateMessage(message) {
@@ -38,9 +40,9 @@ export default class MainContainer extends React.Component {
 			<div className={mainContainerClassName}>
 				<TopContainer ref="topContainer">
 				</TopContainer>
-				<VerticalContainer ref="verticalContainer" updateGold={this.updateGold.bind(this)} updateMessage={this.updateMessage.bind(this)} updateInventory={this.updateInventory.bind(this)}>
-				</VerticalContainer>
-				<InventoryContainer ref="inventory" title={"Items"} className="right container" gold={this.state.gold}>
+				<FishingContainer ref="fishingContainer" updateGold={this.updateGold.bind(this)} updateMessage={this.updateMessage.bind(this)} updateInventory={this.updateInventory.bind(this)}>
+				</FishingContainer>
+				<InventoryContainer ref="inventory" title={"Items"} className="right container" location={this.state.location}>
 				</InventoryContainer>
 			</div>
 		);

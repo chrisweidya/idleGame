@@ -22870,48 +22870,74 @@ var FishCreator = function () {
 		console.log("Fish Creator initialized");
 		this.areas = ["Little Pond", "Freeview River"];
 		this.fishes = [[{
+			index: 0,
 			name: "Angel Fish",
 			type: "fish",
 			health: 5,
 			gold: 1
 		}, {
+			index: 1,
 			name: "Gold Fish",
 			type: "fish",
 			health: 2,
 			gold: 2
 		}, {
+			index: 2,
 			name: "Black Molly",
 			type: "fish",
 			health: 8,
 			gold: 2
 		}, {
+			index: 3,
 			name: "Black Skirt Tetra",
 			type: "fish",
 			health: 10,
 			gold: 4
 		}, {
+			index: 4,
 			name: "Kuhli Loach",
 			type: "fish",
 			health: 7,
 			gold: 1
 		}, {
+			index: 5,
 			name: "Betta",
 			type: "fish",
 			health: 4,
 			gold: 1
 		}], [{
+			index: 6,
 			name: "Barracuda",
 			type: "fish",
 			health: 15,
 			gold: 10
 		}]];
+		this.fishGoldTable = {};
+		this.initializeFishGoldTable();
 	}
 
 	_createClass(FishCreator, [{
+		key: "initializeFishGoldTable",
+		value: function initializeFishGoldTable() {
+			var _this = this;
+
+			this.fishes.map(function (tier) {
+				tier.map(function (fish) {
+					_this.fishGoldTable[fish.name] = fish.gold;
+				});
+			});
+			console.log(this.fishGoldTable);
+		}
+	}, {
 		key: "getFish",
 		value: function getFish(tier) {
 			tier -= 1;
 			return this.fishes[tier][Math.floor(Math.random() * this.fishes[tier].length)];
+		}
+	}, {
+		key: "getFishGold",
+		value: function getFishGold(fishName) {
+			return this.fishGoldTable[fishName];
 		}
 	}, {
 		key: "getArea",
@@ -22973,6 +22999,10 @@ var _verticalContainer = __webpack_require__(59);
 
 var _verticalContainer2 = _interopRequireDefault(_verticalContainer);
 
+var _FishingContainer = __webpack_require__(66);
+
+var _FishingContainer2 = _interopRequireDefault(_FishingContainer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22982,6 +23012,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var mainContainerClassName = "main container";
+var locations = {
+	fishing: "fishing",
+	market: "market"
+};
 
 var MainContainer = function (_React$Component) {
 	_inherits(MainContainer, _React$Component);
@@ -22992,7 +23026,7 @@ var MainContainer = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (MainContainer.__proto__ || Object.getPrototypeOf(MainContainer)).call(this, props));
 
 		_this.state = {
-			gold: 0
+			location: locations.market
 		};
 		return _this;
 	}
@@ -23003,10 +23037,7 @@ var MainContainer = function (_React$Component) {
 	}, {
 		key: 'updateGold',
 		value: function updateGold(val) {
-			console.log("fsaf", this.state.gold);
-			this.setState({
-				gold: this.state.gold + val
-			});
+			this.refs.inventory.updateGold(val);
 		}
 	}, {
 		key: 'updateMessage',
@@ -23025,8 +23056,8 @@ var MainContainer = function (_React$Component) {
 				'div',
 				{ className: mainContainerClassName },
 				_react2.default.createElement(_topContainer2.default, { ref: 'topContainer' }),
-				_react2.default.createElement(_verticalContainer2.default, { ref: 'verticalContainer', updateGold: this.updateGold.bind(this), updateMessage: this.updateMessage.bind(this), updateInventory: this.updateInventory.bind(this) }),
-				_react2.default.createElement(_inventoryContainer2.default, { ref: 'inventory', title: "Items", className: 'right container', gold: this.state.gold })
+				_react2.default.createElement(_FishingContainer2.default, { ref: 'fishingContainer', updateGold: this.updateGold.bind(this), updateMessage: this.updateMessage.bind(this), updateInventory: this.updateInventory.bind(this) }),
+				_react2.default.createElement(_inventoryContainer2.default, { ref: 'inventory', title: "Items", className: 'right container', location: this.state.location })
 			);
 		}
 	}, {
@@ -23058,9 +23089,9 @@ var _react = __webpack_require__(8);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _box = __webpack_require__(21);
+var _fishCreator = __webpack_require__(60);
 
-var _box2 = _interopRequireDefault(_box);
+var _fishCreator2 = _interopRequireDefault(_fishCreator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23071,6 +23102,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var inventoryContainerClassName = "right container";
+var fishItemClassName = "fish-item";
 
 var InventoryContainer = function (_React$Component) {
 	_inherits(InventoryContainer, _React$Component);
@@ -23081,8 +23113,9 @@ var InventoryContainer = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (InventoryContainer.__proto__ || Object.getPrototypeOf(InventoryContainer)).call(this, props));
 
 		_this.state = {
+			location: props.location,
 			title: props.title,
-			gold: props.gold,
+			gold: 0,
 			maxWeight: 5,
 			currentWeight: 0,
 			fishes: {}
@@ -23092,13 +23125,33 @@ var InventoryContainer = function (_React$Component) {
 
 	_createClass(InventoryContainer, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {}
+		value: function componentDidMount() {
+			/*
+   let fishes = this.state.fishes;
+   fishes["Angel Fish"] = 2;
+   this.setState({
+   	fishes: fishes
+   })
+   */
+		}
 	}, {
 		key: 'componentWillReceiveProps',
-		value: function componentWillReceiveProps(nextProps) {
-			console.log("hi", nextProps.gold);
+		value: function componentWillReceiveProps(nextProps) {}
+	}, {
+		key: 'sellFish',
+		value: function sellFish(fishName, count) {
+			var fishes = this.state.fishes;
+			fishes[fishName] = 0;
 			this.setState({
-				gold: nextProps.gold
+				fishes: fishes
+			});
+			this.updateGold(_fishCreator2.default.getFishGold(fishName) * count);
+		}
+	}, {
+		key: 'updateGold',
+		value: function updateGold(val) {
+			this.setState({
+				gold: this.state.gold += val
 			});
 		}
 	}, {
@@ -23106,6 +23159,9 @@ var InventoryContainer = function (_React$Component) {
 		value: function updateInventory(fish) {
 			var fishes = this.state.fishes;
 			if (!fishes[fish.name]) fishes[fish.name] = 1;else fishes[fish.name] += 1;
+			this.setState({
+				fishes: fishes
+			});
 		}
 	}, {
 		key: 'createInventoryContainer',
@@ -23137,13 +23193,29 @@ var InventoryContainer = function (_React$Component) {
 	}, {
 		key: 'createFishList',
 		value: function createFishList() {
+			var _this2 = this;
+
 			var fishes = Object.entries(this.state.fishes);
 			fishes = fishes.map(function (fish, index) {
-				return _react2.default.createElement(
-					'p',
-					{ key: fish[0] + fish[1] },
-					' ',
-					fish[0] + ": " + fish[1]
+				if (fish[1] === 0) return;
+				if (_this2.state.location === "fishing") return _react2.default.createElement(
+					'div',
+					{ key: fish[0] + fish[1], className: fishItemClassName },
+					_react2.default.createElement(
+						'p',
+						null,
+						fish[0] + ": " + fish[1]
+					)
+				);else if (_this2.state.location === "market") return _react2.default.createElement(
+					'div',
+					{ key: fish[0] + fish[1] + "button", className: fishItemClassName },
+					_react2.default.createElement(
+						'button',
+						{ onClick: _this2.sellFish.bind(_this2, fish[0], fish[1]) },
+						' ',
+						"Sell " + fish[1] + " " + fish[0],
+						' '
+					)
 				);
 			});
 			return fishes;
@@ -23217,7 +23289,7 @@ var TopContainer = function (_React$Component) {
 
 		_this.state = {
 			gold: 0,
-			messages: ["fds", "fdsf", "fsd"]
+			messages: ["It's a hot sunny day.", "You take your fishing pole and cast it out.", "Ah, nothing like a day of fishing."]
 		};
 		_this.messageSize = 3;
 		return _this;
@@ -23558,6 +23630,193 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	}
 }());
 
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(8);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDropdown = __webpack_require__(64);
+
+var _reactDropdown2 = _interopRequireDefault(_reactDropdown);
+
+var _box = __webpack_require__(21);
+
+var _box2 = _interopRequireDefault(_box);
+
+var _fishCreator = __webpack_require__(60);
+
+var _fishCreator2 = _interopRequireDefault(_fishCreator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var fishingContainerClassName = "left container";
+
+var FishingContainer = function (_React$Component) {
+	_inherits(FishingContainer, _React$Component);
+
+	/*
+ Slot Schema
+ name:
+ type:
+ className:
+ */
+	function FishingContainer(props) {
+		_classCallCheck(this, FishingContainer);
+
+		var _this = _possibleConstructorReturn(this, (FishingContainer.__proto__ || Object.getPrototypeOf(FishingContainer)).call(this, props));
+
+		_this.state = {
+			title: "",
+			clickPower: 1,
+			intervalDecrease: 1,
+			slots: [],
+			maxTier: 1,
+
+			updateGold: props.updateGold,
+			updateMessage: props.updateMessage,
+			updateInventory: props.updateInventory
+		};
+		_this.tier = 1;
+		return _this;
+	}
+
+	_createClass(FishingContainer, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.initializeSlots();
+			this.initializeArea();
+		}
+	}, {
+		key: 'getNextFish',
+		value: function getNextFish(killed) {
+			if (killed) {
+				this.state.updateInventory(this.state.slots[0]);
+			}
+			var nextFish = _fishCreator2.default.getFish(this.tier);
+			this.state.slots[0] = nextFish;
+			this.setState({
+				slots: this.state.slots
+			});
+		}
+	}, {
+		key: 'sendFishKilledMessage',
+		value: function sendFishKilledMessage(fish, gold) {
+			var message = "You got a " + fish + "! Sold it for " + gold + " gold.";
+			this.state.updateMessage(message);
+		}
+	}, {
+		key: 'increaseClickPower',
+		value: function increaseClickPower() {
+			this.setState({ clickPower: this.state.clickPower += 1 });
+			//console.log("lol", this.state.clickPower);
+		}
+	}, {
+		key: 'initializeSlots',
+		value: function initializeSlots() {
+			var slots = [];
+			var nextFish = _fishCreator2.default.getFish(this.tier);
+			slots.push(nextFish);
+			this.setState({
+				slots: slots
+			});
+			return slots;
+		}
+	}, {
+		key: 'initializeArea',
+		value: function initializeArea() {
+			this.state.title = _fishCreator2.default.getArea(this.tier);
+		}
+	}, {
+		key: 'moveArea',
+		value: function moveArea(tier) {
+			console.log("tier: ", tier);
+			this.tier = tier.value;
+			this.setState({
+				title: _fishCreator2.default.getArea(this.tier)
+			});
+			this.getNextFish(false);
+		}
+	}, {
+		key: 'insertBox',
+		value: function insertBox(slots, slot) {
+			//slots.push(slot);
+			return slots.push(slot);
+		}
+
+		//Rendering
+
+	}, {
+		key: 'createBoxes',
+		value: function createBoxes() {
+			var _this2 = this;
+
+			var boxes = this.state.slots.map(function (slot, index) {
+				return _react2.default.createElement(_box2.default, {
+					key: index + slot.type,
+					index: index,
+					name: slot.name,
+					type: slot.type,
+					health: slot.health,
+					clickPower: _this2.state.clickPower,
+					intervalDecrease: _this2.state.intervalDecrease,
+					increaseClickPower: _this2.increaseClickPower.bind(_this2),
+					getNextFish: _this2.getNextFish.bind(_this2)
+				});
+			});
+			return boxes;
+		}
+	}, {
+		key: 'createAreaDropdown',
+		value: function createAreaDropdown() {
+			if (this.state.maxTier === 1) return;
+			var areas = _fishCreator2.default.getAreasDropdownInfo(this.state.maxTier);
+			return _react2.default.createElement(_reactDropdown2.default, { className: 'dropdown', options: areas, onChange: this.moveArea.bind(this), value: _fishCreator2.default.getArea(this.tier), placeholder: 'Select an option' });
+		}
+	}, {
+		key: 'createLeftContainer',
+		value: function createLeftContainer() {
+			return _react2.default.createElement(
+				'div',
+				{ key: this.state.title, className: fishingContainerClassName },
+				_react2.default.createElement(
+					'h2',
+					null,
+					this.state.title
+				),
+				this.createBoxes(),
+				this.createAreaDropdown()
+			);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return this.createLeftContainer();
+		}
+	}]);
+
+	return FishingContainer;
+}(_react2.default.Component);
+
+exports.default = FishingContainer;
 
 /***/ })
 /******/ ]);

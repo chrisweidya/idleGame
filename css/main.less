@@ -1,6 +1,6 @@
 
 @col-width: 33.33%;
-@max-width: 96%;
+@max-width: 100%;
 
 @light-yellow: #f9e486;
 
@@ -102,12 +102,11 @@ h4 {
 
 .main {
 	.width(@max-width);
-	.height(100%);
 	.center();
 }
 
 .top {
-	.width(100%);
+	.width(@max-width);
 	.border;
 }
 
@@ -147,4 +146,9 @@ h4 {
 .bar-fg {
 	background-color: @bar-fg-color;
 	height: @bar-height;
+}
+
+.fish-item {
+	.baseBottomMargin();
+	.width(@max-width);
 }

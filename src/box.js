@@ -9,26 +9,42 @@ export default class Box extends React.Component {
 		super(props);
 		this.state = {
 			type: props.type,
-			title: props.title,
-			className: props.className,
-			startTime: Date.now(),
-			cooldown: 60,
-			progress: 0,
-			fillAmount: 0,
-			interval: 10,
-			number: 0
+			name: props.name,
+			index: props.index,
+			className: "box",
+			startTime: Date.now(), //unused
+			cooldown: 60, //unused
+			interval: 2000,
+			health: props.health,
+			currentHealth: props.health,
+			fillAmount: 100,
+			clickPower: props.clickPower,
+			intervalDecrease: props.intervalDecrease,
+			increaseClickPower: props.increaseClickPower,
+			getNextFish: props.getNextFish,
+			number: 0 //unused
 		}
 	}
 
 	componentDidMount() {
 		console.log("mounted");
-		setInterval(this.updateProgressBar.bind(this), 1000);
+		setInterval(this.updateProgressBar.bind(this), this.state.interval);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			name: nextProps.name,
+			type: nextProps.type,
+			health: nextProps.health,
+			currentHealth: nextProps.health,
+			fillAmount: 100
+		});		
 	}
 
 	createBoxElement() {
 		let boxElement = (
 			<div className={this.state.className}> 
-				<h3>Please?</h3>
+				<h4>{this.state.name}</h4>
 				{this.createButton()} 
 				{this.createProgressBar()}
 			</div>
@@ -39,6 +55,7 @@ export default class Box extends React.Component {
 	createProgressBar() {
 		//if(this.state.progressTimer === null)
 		//	return;
+		console.log("draw", this.state.fillAmount);
 		return (
 			<div className={barBgClassName}>
 				<Progress completed={this.state.fillAmount} />
@@ -46,32 +63,29 @@ export default class Box extends React.Component {
 		);
 	}
 
-	updateProgressBar() {
-		console.log(this.state.progress);
-		this.state.progress++;
-		if(this.state.progress>=this.state.cooldown) {
-			this.state.progress = 0;
+	updateProgressBar(clickPower) {
+		if(this.state.currentHealth <= 0)
+			return;
+		if(!clickPower)
+			clickPower = this.state.clickPower;
+		console.log(this.state.currentHealth);
+		this.state.currentHealth -= clickPower;
+		if(this.state.currentHealth <= 0) {
+			this.setState({fillAmount: 0});
+			this.handleDeadFish();
 		}
-		this.setState({fillAmount: this.state.progress/this.state.cooldown*100});
+		else {
+			this.setState({fillAmount: this.state.currentHealth/this.state.health*100});
+		}
 	}
 
-
-
-	step(timestamp) {
-		if(!this.state.startTime)
-			this.state.startTime = timestamp;
-		let progress = timestamp - this.state.startTime;
-		if(progress > this.state.progressTimer)
-			this.state.startTime += this.state.progressTimer;
-		let fillAmount = progress%this.state.progressTimer/this.state.progressTimer *100;
-		this.setState({fillAmount: fillAmount});
-		console.log(fillAmount);	
-		window.requestAnimationFrame(this.step.bind(this));
+	handleDeadFish() {				
+		setTimeout(this.state.getNextFish.bind(this, true), 300);
 	}
 
 	buttonClicked() {
-		this.state.number++;
-		console.log(this.state.number);
+		//this.state.increaseClickPower();
+		this.updateProgressBar(this.state.clickPower);
 	}
 
 	createButton() {

@@ -23057,7 +23057,7 @@ var MainContainer = function (_React$Component) {
 				{ className: mainContainerClassName },
 				_react2.default.createElement(_topContainer2.default, { ref: 'topContainer' }),
 				_react2.default.createElement(_FishingContainer2.default, { ref: 'fishingContainer', updateGold: this.updateGold.bind(this), updateMessage: this.updateMessage.bind(this), updateInventory: this.updateInventory.bind(this) }),
-				_react2.default.createElement(_inventoryContainer2.default, { ref: 'inventory', title: "Items", className: 'right container', location: this.state.location })
+				_react2.default.createElement(_inventoryContainer2.default, { ref: 'inventory', title: "Items", className: 'right container', location: this.state.location, updateMessage: this.updateMessage.bind(this) })
 			);
 		}
 	}, {
@@ -23118,7 +23118,9 @@ var InventoryContainer = function (_React$Component) {
 			gold: 0,
 			maxWeight: 5,
 			currentWeight: 0,
-			fishes: {}
+			fishes: {},
+
+			updateMessage: props.updateMessage
 		};
 		return _this;
 	}
@@ -23157,6 +23159,7 @@ var InventoryContainer = function (_React$Component) {
 	}, {
 		key: 'updateInventory',
 		value: function updateInventory(fish) {
+			this.state.updateMessage("You received 1 " + fish.name + ".");
 			var fishes = this.state.fishes;
 			if (!fishes[fish.name]) fishes[fish.name] = 1;else fishes[fish.name] += 1;
 			this.setState({
@@ -23301,11 +23304,14 @@ var TopContainer = function (_React$Component) {
 	}, {
 		key: 'addMessage',
 		value: function addMessage(message) {
-			if (this.state.messages.length >= 3) {
+			if (this.state.messages.length >= this.messageSize) {
 				this.state.messages.splice(0, 1);
 				console.log(this.state.messages);
 			}
 			this.state.messages.push(message);
+			this.setState({
+				messages: this.state.messages
+			});
 		}
 	}, {
 		key: 'createMessages',

@@ -14,7 +14,9 @@ export default class InventoryContainer extends React.Component {
 			gold: 0,
 			maxWeight: 5,
 			currentWeight: 0,
-			fishes: {}
+			fishes: {},
+
+			updateMessage: props.updateMessage
 		}
 	}
 
@@ -47,6 +49,7 @@ export default class InventoryContainer extends React.Component {
 	}
 
 	updateInventory(fish) {
+		this.state.updateMessage("You received 1 " + fish.name + ".");
 		let fishes = this.state.fishes;
 		if(!fishes[fish.name])
 			fishes[fish.name] = 1;

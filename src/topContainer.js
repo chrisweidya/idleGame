@@ -18,11 +18,14 @@ export default class TopContainer extends React.Component {
 	}
 
 	addMessage(message) {
-		if(this.state.messages.length >= 3) {
+		if(this.state.messages.length >= this.messageSize) {
 			this.state.messages.splice(0, 1);
 			console.log(this.state.messages);
 		}
 		this.state.messages.push(message);
+		this.setState({
+			messages: this.state.messages
+		});
 	}
 
 	createMessages() {

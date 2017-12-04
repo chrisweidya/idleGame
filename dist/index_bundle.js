@@ -22708,9 +22708,11 @@ var VerticalContainer = function (_React$Component) {
 			clickPower: 1,
 			intervalDecrease: 1,
 			slots: [],
+			maxTier: 1,
 
 			updateGold: props.updateGold,
-			updateMessage: props.updateMessage
+			updateMessage: props.updateMessage,
+			updateInventory: props.updateInventory
 		};
 		_this.tier = 1;
 		return _this;
@@ -22726,6 +22728,7 @@ var VerticalContainer = function (_React$Component) {
 		key: 'getNextFish',
 		value: function getNextFish(killed) {
 			if (killed) {
+				this.state.updateInventory(this.state.slots[0]);
 				this.sendFishKilledMessage(this.state.slots[0].name, this.state.slots[0].gold);
 				this.state.updateGold(this.state.slots[0].gold);
 				console.log("Current Bount: ", this.state.slots[0].gold);
@@ -22806,7 +22809,8 @@ var VerticalContainer = function (_React$Component) {
 	}, {
 		key: 'createAreaDropdown',
 		value: function createAreaDropdown() {
-			var areas = _fishCreator2.default.getAreasDropdownInfo();
+			if (this.state.maxTier === 1) return;
+			var areas = _fishCreator2.default.getAreasDropdownInfo(this.state.maxTier);
 			return _react2.default.createElement(_reactDropdown2.default, { className: 'dropdown', options: areas, onChange: this.moveArea.bind(this), value: _fishCreator2.default.getArea(this.tier), placeholder: 'Select an option' });
 		}
 	}, {
@@ -22922,9 +22926,9 @@ var FishCreator = function () {
 		}
 	}, {
 		key: "getAreasDropdownInfo",
-		value: function getAreasDropdownInfo() {
+		value: function getAreasDropdownInfo(maxTier) {
 			var options = [{ value: 1, label: this.areas[0] }, { value: 2, label: this.areas[1] }];
-			return options;
+			return options.slice(0, maxTier);
 		}
 	}]);
 
@@ -23010,8 +23014,10 @@ var MainContainer = function (_React$Component) {
 			this.refs.topContainer.addMessage(message);
 		}
 	}, {
-		key: 'moveArea',
-		value: function moveArea(area) {}
+		key: 'updateInventory',
+		value: function updateInventory(fish) {
+			var updated = this.refs.inventory.updateInventory(fish);
+		}
 	}, {
 		key: 'createMainContainer',
 		value: function createMainContainer() {
@@ -23019,8 +23025,8 @@ var MainContainer = function (_React$Component) {
 				'div',
 				{ className: mainContainerClassName },
 				_react2.default.createElement(_topContainer2.default, { ref: 'topContainer' }),
-				_react2.default.createElement(_verticalContainer2.default, { ref: 'verticalContainer', updateGold: this.updateGold.bind(this), updateMessage: this.updateMessage.bind(this) }),
-				_react2.default.createElement(_inventoryContainer2.default, { title: "Items", className: 'right container', gold: this.state.gold })
+				_react2.default.createElement(_verticalContainer2.default, { ref: 'verticalContainer', updateGold: this.updateGold.bind(this), updateMessage: this.updateMessage.bind(this), updateInventory: this.updateInventory.bind(this) }),
+				_react2.default.createElement(_inventoryContainer2.default, { ref: 'inventory', title: "Items", className: 'right container', gold: this.state.gold })
 			);
 		}
 	}, {
@@ -23076,7 +23082,10 @@ var InventoryContainer = function (_React$Component) {
 
 		_this.state = {
 			title: props.title,
-			gold: props.gold
+			gold: props.gold,
+			maxWeight: 5,
+			currentWeight: 0,
+			fishes: {}
 		};
 		return _this;
 	}
@@ -23093,6 +23102,12 @@ var InventoryContainer = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'updateInventory',
+		value: function updateInventory(fish) {
+			var fishes = this.state.fishes;
+			if (!fishes[fish.name]) fishes[fish.name] = 1;else fishes[fish.name] += 1;
+		}
+	}, {
 		key: 'createInventoryContainer',
 		value: function createInventoryContainer() {
 			return _react2.default.createElement(
@@ -23103,8 +23118,35 @@ var InventoryContainer = function (_React$Component) {
 					null,
 					this.state.title
 				),
-				this.createResourceList()
+				this.createGoldText(),
+				this.createFishList()
 			);
+		}
+	}, {
+		key: 'createGoldText',
+		value: function createGoldText() {
+			if (this.state.gold != null) {
+				return _react2.default.createElement(
+					'h4',
+					{ key: 'gold' },
+					'Gold: ',
+					this.state.gold
+				);
+			}
+		}
+	}, {
+		key: 'createFishList',
+		value: function createFishList() {
+			var fishes = Object.entries(this.state.fishes);
+			fishes = fishes.map(function (fish, index) {
+				return _react2.default.createElement(
+					'p',
+					{ key: fish[0] + fish[1] },
+					' ',
+					fish[0] + ": " + fish[1]
+				);
+			});
+			return fishes;
 		}
 	}, {
 		key: 'createResourceList',

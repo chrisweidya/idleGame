@@ -74,12 +74,12 @@ class FishCreator {
 		return this.areas;
 	}
 
-	getAreasDropdownInfo() {
+	getAreasDropdownInfo(maxTier) {
 		let options = [
 			{ value: 1, label: this.areas[0] },
 			{ value: 2, label: this.areas[1] }
 		]
-		return options;
+		return options.slice(0, maxTier);
 	}
 }
 

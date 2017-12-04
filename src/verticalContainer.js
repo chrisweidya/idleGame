@@ -20,9 +20,11 @@ export default class VerticalContainer extends React.Component {
 			clickPower: 1,
 			intervalDecrease: 1,
 			slots: [],
+			maxTier: 1,
 
 			updateGold: props.updateGold,
-			updateMessage: props.updateMessage
+			updateMessage: props.updateMessage,
+			updateInventory: props.updateInventory
 		}
 		this.tier = 1;
 	}
@@ -34,6 +36,7 @@ export default class VerticalContainer extends React.Component {
 
 	getNextFish(killed) {
 		if(killed) {
+			this.state.updateInventory(this.state.slots[0]);
 			this.sendFishKilledMessage(this.state.slots[0].name, this.state.slots[0].gold);
 			this.state.updateGold(this.state.slots[0].gold);
 			console.log("Current Bount: ", this.state.slots[0].gold);
@@ -106,7 +109,9 @@ export default class VerticalContainer extends React.Component {
 	}
 
 	createAreaDropdown() {
-		let areas = FishCreator.getAreasDropdownInfo();
+		if(this.state.maxTier === 1)
+			return;
+		let areas = FishCreator.getAreasDropdownInfo(this.state.maxTier);
 		return (
 			<Dropdown className="dropdown" options={areas} onChange={this.moveArea.bind(this)} value={FishCreator.getArea(this.tier)} placeholder="Select an option" />
 		);

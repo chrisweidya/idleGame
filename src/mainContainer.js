@@ -29,8 +29,8 @@ export default class MainContainer extends React.Component {
 		this.refs.topContainer.addMessage(message);
 	}
 
-	moveArea(area) {
-
+	updateInventory(fish) {
+		let updated = this.refs.inventory.updateInventory(fish);
 	}
 
 	createMainContainer() {
@@ -38,9 +38,9 @@ export default class MainContainer extends React.Component {
 			<div className={mainContainerClassName}>
 				<TopContainer ref="topContainer">
 				</TopContainer>
-				<VerticalContainer ref="verticalContainer" updateGold={this.updateGold.bind(this)} updateMessage={this.updateMessage.bind(this)}>
+				<VerticalContainer ref="verticalContainer" updateGold={this.updateGold.bind(this)} updateMessage={this.updateMessage.bind(this)} updateInventory={this.updateInventory.bind(this)}>
 				</VerticalContainer>
-				<InventoryContainer title={"Items"} className="right container" gold={this.state.gold}>
+				<InventoryContainer ref="inventory" title={"Items"} className="right container" gold={this.state.gold}>
 				</InventoryContainer>
 			</div>
 		);

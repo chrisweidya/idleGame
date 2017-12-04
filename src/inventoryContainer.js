@@ -9,7 +9,10 @@ export default class InventoryContainer extends React.Component {
 		super(props);
 		this.state = {
 			title: props.title,
-			gold: props.gold
+			gold: props.gold,
+			maxWeight: 5,
+			currentWeight: 0,
+			fishes: {}
 		}
 	}
 
@@ -23,13 +26,36 @@ export default class InventoryContainer extends React.Component {
 		});
 	}
 
+	updateInventory(fish) {
+		let fishes = this.state.fishes;
+		if(!fishes[fish.name])
+			fishes[fish.name] = 1;
+		else
+			fishes[fish.name] += 1;
+	}
+
 	createInventoryContainer() {
 		return (
 			<div key={this.state.title} className={inventoryContainerClassName}> 
 				<h2>{this.state.title}</h2> 
-				{this.createResourceList()}
+				{this.createGoldText()}
+				{this.createFishList()}
 			</div>
 		);
+	}
+
+	createGoldText() {		
+		if(this.state.gold != null) {
+			return (<h4 key="gold">Gold: {this.state.gold}</h4>);
+		}
+	}
+
+	createFishList() {
+		let fishes = Object.entries(this.state.fishes);
+		fishes = fishes.map((fish, index) => {
+			return (<p key={fish[0] + fish[1]}> {fish[0] + ": " + fish[1]}</p>);
+		});
+		return fishes;
 	}
 
 	createResourceList() {

@@ -20,7 +20,7 @@ export default class FishingContainer extends React.Component {
 			clickPower: 1,
 			intervalDecrease: 1,
 			slots: [],
-			maxTier: 1,
+			maxTier: 3,
 
 			updateGold: props.updateGold,
 			updateMessage: props.updateMessage,

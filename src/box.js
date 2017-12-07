@@ -37,7 +37,7 @@ export default class Box extends React.Component {
 			type: nextProps.type,
 			health: nextProps.health,
 			currentHealth: nextProps.health,
-			fillAmount: 100
+			clickPower: nextProps.clickPower
 		});		
 	}
 
@@ -91,7 +91,7 @@ export default class Box extends React.Component {
 	createButton() {
 		return (
 			<button onClick={this.buttonClicked.bind(this)}> 
-			CLick 
+			Reel
 			</button>
 		);
 	}	

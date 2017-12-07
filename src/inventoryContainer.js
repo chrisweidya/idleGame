@@ -48,6 +48,17 @@ export default class InventoryContainer extends React.Component {
 		});
 	}
 
+	minusGold(val) {
+		if(this.state.gold >= val) {
+			this.setState({
+				gold: this.state.gold -= val
+			});
+			return true;
+		}
+		else
+			return false;
+	}
+
 	updateInventory(fish) {
 		this.state.updateMessage("You received 1 " + fish.name + ".");
 		let fishes = this.state.fishes;

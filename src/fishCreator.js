@@ -8,7 +8,8 @@ class FishCreator {
 		console.log("Fish Creator initialized");
 		this.areas = [
 			"Little Pond",
-			"Freeview River"
+			"Pacific Wonder Sea",
+			"The Abyss"
 		]
 		this.fishes = [
 			[
@@ -16,54 +17,77 @@ class FishCreator {
 					index: 0,
 					name: "Angel Fish",
 					type: "fish",
-					health: 5,
-					gold: 1
+					health: 10,
+					gold: 5
 				},
 				{	
 					index: 1,
 					name: "Gold Fish",
 					type: "fish",
-					health: 2,
-					gold: 2
+					health: 20,
+					gold: 10
 				},
 				{
 					index: 2,
 					name: "Black Molly",
 					type: "fish",
-					health: 8,
-					gold: 2	
+					health: 60,
+					gold: 20
 				},
 				{
 					index: 3,
 					name: "Black Skirt Tetra",
 					type: "fish",
-					health: 10,
-					gold: 4
+					health: 70,
+					gold: 40
 				},
 				{
 					index: 4,
 					name: "Kuhli Loach",
 					type: "fish",
-					health: 7,
-					gold: 1
+					health: 50,
+					gold: 10
 				},
 				{
 					index: 5,
 					name: "Betta",
 					type: "fish",
-					health: 4,
-					gold: 1
+					health: 40,
+					gold: 15
 				}
 			],
 			[
 				{
 					index: 6,
-					name: "Barracuda",
+					name: "Electric Eel",
 					type: "fish",
-					health: 15,
-					gold: 10
+					health: 150,
+					gold: 110
+				},
+				{
+					index: 7,
+					name: "Shark",
+					type: "fish",
+					health: 200,
+					gold: 180
+				},
+				{
+					index: 8,
+					name: "Killer Whale",
+					type: "fish",
+					health: 250,
+					gold: 220
 				}
 			],
+			[
+				{
+					index: 9,
+					name: "Poseidon, God of the Sea",
+					type: "fish",
+					health: 10000,
+					gold: 80000
+				}
+			]
 		];
 		this.fishGoldTable = {};
 		this.initializeFishGoldTable();
@@ -100,7 +124,8 @@ class FishCreator {
 	getAreasDropdownInfo(maxTier) {
 		let options = [
 			{ value: 1, label: this.areas[0] },
-			{ value: 2, label: this.areas[1] }
+			{ value: 2, label: this.areas[1] },
+			{ value: 3, label: this.areas[2] },			
 		];
 		return options.slice(0, maxTier);
 	}

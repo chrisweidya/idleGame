@@ -86,6 +86,12 @@ h4 {
   border-style: solid;
   border-width: 1px;
 }
+.middle {
+  width: 33.33%;
+  float: left;
+  border-style: solid;
+  border-width: 1px;
+}
 .bar-bg {
   background-color: gray;
 }

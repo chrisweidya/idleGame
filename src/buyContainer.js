@@ -58,7 +58,7 @@ export default class BuyContainer extends React.Component {
 	createShopItems(){		
 		return (
 			<div key='power' className={fishItemClassName}>
-				<button onClick={this.updateClickPower.bind(this, this.state.cpGoldRequired)}> {"+Str, Cost: " + this.state.cpGoldRequired} </button>
+				<button onClick={this.updateClickPower.bind(this, this.state.cpGoldRequired)}> {"+Str, Cost: " + this.state.cpGoldRequired + "g"} </button>
 			</div>
 		);
 	}

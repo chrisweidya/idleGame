@@ -11,7 +11,7 @@ export default class BuyContainer extends React.Component {
 		this.state = {
 			location: props.location,
 			title: props.title,
-			cpGoldRequired: 10,
+			cpGoldRequired: 5,
 
 			minusGold: props.minusGold,
 			increaseClickPower: props.increaseClickPower,

@@ -1,21 +1,33 @@
 import React from 'react';
-import FishCreator from './fishCreator.js';
+import {connect} from 'react-redux';
+import {increaseStr} from './redux/actions';
 
 const buyContainerClassName = "middle container";
 const fishItemClassName = "fish-item";
 
-export default class BuyContainer extends React.Component {
+const mapStateToProps = state => {
+	return { 
+		strCost: state.stats.strCost 
+	};
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		increaseStr: payload => dispatch(increaseStr(payload))
+	};
+};
+
+class ConnectedBuyContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			location: props.location,
-			title: props.title,
-			cpGoldRequired: 5,
+			strCost: props.strCost
+			//location: props.location,
+			//title: props.title,
+			//strCost: props.strCost,
 
-			minusGold: props.minusGold,
-			increaseClickPower: props.increaseClickPower,
-			updateMessage: props.updateMessage
+			//increaseClickPower: props.increaseClickPower
 		}
 	}
 
@@ -23,17 +35,18 @@ export default class BuyContainer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		this.state.strCost = nextProps.strCost;
+		/*
+		this.setState({
+			strCost: nextProps.strCost
+		});
+		*/
 	}
 
-	createSuccessText() {
-		this.state.updateMessage("Increased Strength.");
-	}
-
-	createFailureText() {
-		this.state.updateMessage("Insufficient Gold.");
-	}
-
-	updateClickPower(val){
+	updateClickPower(){
+		this.props.increaseStr();
+		//this.state.increaseClickPower();
+		/*
 		if(this.state.minusGold(val)){
 			this.state.increaseClickPower();
 			this.createSuccessText();
@@ -44,6 +57,7 @@ export default class BuyContainer extends React.Component {
 		else {
 			this.createFailureText();
 		}
+		*/
 
 	}
 
@@ -58,7 +72,7 @@ export default class BuyContainer extends React.Component {
 	createShopItems(){		
 		return (
 			<div key='power' className={fishItemClassName}>
-				<button onClick={this.updateClickPower.bind(this, this.state.cpGoldRequired)}> {"+Str, Cost: " + this.state.cpGoldRequired + "g"} </button>
+				<button onClick={this.updateClickPower.bind(this)}> {"+Str, Cost: " + this.state.strCost + "g"} </button>
 			</div>
 		);
 	}
@@ -66,3 +80,7 @@ export default class BuyContainer extends React.Component {
 		return this.createShop();
 	}
 }
+
+const BuyContainer = connect(mapStateToProps, mapDispatchToProps) (ConnectedBuyContainer);
+export default BuyContainer;
+

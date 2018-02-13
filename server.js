@@ -6,7 +6,7 @@ module.exports = {
     const app = express()
     const indexPath = path.join(__dirname, '/dist/index.html')
     console.log(indexPath);
-    const publicPath = express.static(path.join(__dirname, '/'))    
+    const publicPath = express.static(path.join(__dirname, '/css'))    
     const distPath = express.static(path.join(__dirname, '/dist/'))
 
     app.use('/', publicPath)    

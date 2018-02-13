@@ -1,17 +1,23 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import FishCreator from './fishCreator.js';
 
 const inventoryContainerClassName = "right container";
 const fishItemClassName = "fish-item";
 
-export default class InventoryContainer extends React.Component {
+const mapStateToProps = state => {
+	return {
+		gold: state.stats.gold
+	};
+}
+class ConnectedInventoryContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			location: props.location,
 			title: props.title,
-			gold: 0,
+			gold: props.gold,
 			maxWeight: 5,
 			currentWeight: 0,
 			fishes: {},
@@ -30,7 +36,8 @@ export default class InventoryContainer extends React.Component {
 		*/
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(props) {
+		this.state.gold = props.gold;
 	}
 
 	sellFish(fishName, count) {
@@ -43,11 +50,12 @@ export default class InventoryContainer extends React.Component {
 	}
 
 	updateGold(val) {
-		this.setState({
-			gold: this.state.gold += val
-		});
+		//this.setState({
+			//gold: this.state.gold += val
+		//});
 	}
 
+/*
 	minusGold(val) {
 		if(this.state.gold >= val) {
 			this.setState({
@@ -58,6 +66,7 @@ export default class InventoryContainer extends React.Component {
 		else
 			return false;
 	}
+*/
 
 	updateInventory(fish) {
 		this.state.updateMessage("You received 1 " + fish.name + ".");
@@ -108,16 +117,10 @@ export default class InventoryContainer extends React.Component {
 		return fishes;
 	}
 
-	createResourceList() {
-		let resource = [];
-		if(this.state.gold != null) {
-			let goldElement = (<h4 key="gold">Gold: {this.state.gold}</h4>);
-			resource.push(goldElement);
-		}
-		console.log(resource + "lol");
-		return resource;
-	}
 	render() {
 		return this.createInventoryContainer();
 	}
 }
+
+const InventoryContainer = connect(mapStateToProps) (ConnectedInventoryContainer);
+export default InventoryContainer;

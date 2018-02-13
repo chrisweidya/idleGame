@@ -17,7 +17,7 @@ export default class FishingContainer extends React.Component {
 		super(props);
 		this.state = {
 			title: "",
-			clickPower: 1,
+			clickPower: props.str,
 			intervalDecrease: 1,
 			slots: [],
 			maxTier: 3,
@@ -34,6 +34,13 @@ export default class FishingContainer extends React.Component {
 		this.initializeArea();
 	}
 
+	componentWillReceiveProps(props) {
+		console.log(props);
+		this.setState({
+			clickPower: props.str 
+		});
+	}
+
 	getNextFish(killed) {
 		if(killed) {
 			this.state.updateInventory(this.state.slots[0]);
@@ -48,11 +55,6 @@ export default class FishingContainer extends React.Component {
 	sendFishKilledMessage(fish, gold) {
 		let message = "You got a " + fish + "! Sold it for " + gold + " gold.";
 		this.state.updateMessage(message);
-	}
-
-	increaseClickPower() {
-		this.setState({clickPower: this.state.clickPower += 1});
-		//console.log("lol", this.state.clickPower);
 	}
 
 	initializeSlots() {
@@ -96,7 +98,6 @@ export default class FishingContainer extends React.Component {
 					health={slot.health}
 					clickPower={this.state.clickPower}
 					intervalDecrease={this.state.intervalDecrease} 
-					increaseClickPower={this.increaseClickPower.bind(this)}
 					getNextFish={this.getNextFish.bind(this)}
 					>
 				</Box>

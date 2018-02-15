@@ -1,31 +1,31 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Box from './box.js';
 
 const topContainerClassName= "top container";
 
-export default class TopContainer extends React.Component {
+const mapStateToProps = state => {
+	return {
+		messageSize: state.settings.messageSize,
+		messages: state.messages
+	};
+}
+
+class ConnectedTopContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			gold: 0,
-			messages: ["It's a hot sunny day.", "You take your fishing pole and cast it out.", "Ah, nothing like a day of fishing."]
+			messageSize: props.messageSize,
+			messages: props.messages
 		};
-		this.messageSize = 3;
 	}
 
-	componentDidMount() {
+	componentWillReceiveProps(nextProps) {
+		this.state.messages = nextProps.messages;
 	}
 
-	addMessage(message) {
-		if(this.state.messages.length >= this.messageSize) {
-			this.state.messages.splice(0, 1);
-			console.log(this.state.messages);
-		}
-		this.state.messages.push(message);
-		this.setState({
-			messages: this.state.messages
-		});
+	componentDidMount() {	
 	}
 
 	createMessages() {
@@ -35,6 +35,7 @@ export default class TopContainer extends React.Component {
 		});
 
 		return messages;
+		
 	}
 
 	createTopContainer() {
@@ -49,3 +50,6 @@ export default class TopContainer extends React.Component {
 		return this.createTopContainer();
 	}
 }
+
+const TopContainer = connect(mapStateToProps) (ConnectedTopContainer);
+export default TopContainer;

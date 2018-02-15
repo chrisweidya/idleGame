@@ -40,11 +40,11 @@ export default class MainContainer extends React.Component {
 	}
 
 	updateMessage(message) {
-		this.refs.topContainer.addMessage(message);
+		//this.refs.topContainer.addMessage(message);
 	}
 
 	updateInventory(fish) {
-		let updated = this.refs.inventory.updateInventory(fish);
+		//let updated = this.refs.inventory.updateInventory(fish);
 	}
 
 	minusGold(val){
@@ -78,7 +78,7 @@ export default class MainContainer extends React.Component {
 	createMainContainer() {
 		return (
 			<div className={mainContainerClassName}>
-				<TopContainer ref="topContainer">
+				<TopContainer>
 				</TopContainer>
 				<FishingContainer ref="fishingContainer" updateGold={this.updateGold.bind(this)} str={this.state.stats.str} updateMessage={this.updateMessage.bind(this)} updateInventory={this.updateInventory.bind(this)}>
 				</FishingContainer>

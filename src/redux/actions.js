@@ -1,6 +1,7 @@
 import store from './store';
 import {articles} from './constants';
 import {messagesEnum} from './constants';
+import FishCreator from '../fishCreator.js';
 
 console.log(articles);
 
@@ -24,6 +25,12 @@ export const increaseStr = () => {
 		return addMessage(messagesEnum.INSUFFICIENT_GOLD);
 };
 
+export const changeLocation = location => {
+	return {
+		type: articles.CHANGE_LOCATION, newLocation: location
+	};
+};
+
 export const addMessage = message => {
 	let currState = store.getState();
 	let messages = [...currState.messages];	
@@ -33,5 +40,5 @@ export const addMessage = message => {
 	messages.push(message);
 	return {
 		type: articles.ADD_MESSAGE, newMessages: messages
-	}
+	};
 };

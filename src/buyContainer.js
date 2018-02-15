@@ -11,11 +11,9 @@ const mapStateToProps = state => {
 	};
 }
 
-const mapDispatchToProps = dispatch => {
-	return {
-		increaseStr: payload => dispatch(increaseStr(payload))
-	};
-};
+const mapDispatchToProps = dispatch => ({
+	increaseStr: payload => dispatch(increaseStr(payload))
+});
 
 class ConnectedBuyContainer extends React.Component {
 

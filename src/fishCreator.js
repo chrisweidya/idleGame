@@ -105,6 +105,7 @@ class FishCreator {
 
 	getFish(tier) {
 		tier -= 1;
+		console.log(tier);
 		return this.fishes[tier][Math.floor(Math.random()*this.fishes[tier].length)];
 	}
 

@@ -1,11 +1,23 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import Dropdown from 'react-dropdown';
 import Box from './box.js';
 import FishCreator from './fishCreator.js';
 
 const fishingContainerClassName = "left container";
 
-export default class FishingContainer extends React.Component {
+const mapStateToProps = state => {
+	return {
+		location: state.location.currLocation,
+		tier: state.location.tier,
+		fish: state.fish
+	};
+};
+
+const mapDispatchToProps = dispatch => ({
+});
+
+class ConnectedFishingContainer extends React.Component {
 
 	/*
 	Slot Schema
@@ -16,17 +28,17 @@ export default class FishingContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			title: "",
+			title: props.location,
 			clickPower: props.str,
 			intervalDecrease: 1,
 			slots: [],
-			maxTier: 3,
+			fish: props.fish,
+			tier: props.tier,
 
 			updateGold: props.updateGold,
 			updateMessage: props.updateMessage,
 			updateInventory: props.updateInventory
 		}
-		this.tier = 1;
 	}
 
 	componentDidMount() {
@@ -34,7 +46,10 @@ export default class FishingContainer extends React.Component {
 		this.initializeArea();
 	}
 
-	componentWillReceiveProps(props) {
+	componentWillReceiveProps(nextProps) {
+		this.state.location = nextProps.location;
+		this.state.tier = nextProps.tier;
+		this.state.fish = nextProps.fish;
 		console.log(props);
 		this.setState({
 			clickPower: props.str 
@@ -43,7 +58,7 @@ export default class FishingContainer extends React.Component {
 
 	getNextFish(killed) {
 		if(killed) {
-			this.state.updateInventory(this.state.slots[0]);
+			this.state.updateInventory(this.state.fish);
 		}
 		let nextFish = FishCreator.getFish(this.tier);
 		this.state.slots[0] = nextFish;
@@ -58,24 +73,26 @@ export default class FishingContainer extends React.Component {
 	}
 
 	initializeSlots() {
+		/*
 		let slots = [];
-		let nextFish = FishCreator.getFish(this.tier);
+		let nextFish = FishCreator.getFish(this.state.tier);
 		slots.push(nextFish);
 		this.setState({
 			slots: slots
 		});
 		return slots;
+		*/
 	}
 
 	initializeArea() {
-		this.state.title = FishCreator.getArea(this.tier);
+		this.state.title = FishCreator.getArea(this.state.tier);
 	}
 
 	moveArea(tier) {
 		console.log("tier: ", tier);
 		this.tier = tier.value;
 		this.setState({
-			title: FishCreator.getArea(this.tier)
+			title: FishCreator.getArea(this.state.tier)
 		});
 		this.getNextFish(false);
 	}
@@ -88,6 +105,7 @@ export default class FishingContainer extends React.Component {
 
 	//Rendering
 	createBoxes() {
+		/*
 		const boxes = this.state.slots.map((slot, index) => {
 			return (
 				<Box 
@@ -103,6 +121,18 @@ export default class FishingContainer extends React.Component {
 				</Box>
 			);
 		});
+		*/
+		const boxes = (
+				<Box 
+					name={this.state.fish.name}
+					type={this.state.fish.type}
+					health={this.state.fish.health}
+					clickPower={this.state.clickPower}
+					intervalDecrease={this.state.intervalDecrease} 
+					getNextFish={this.getNextFish.bind(this)}
+					>
+				</Box>
+			)
 		return boxes;
 	}
 
@@ -111,7 +141,7 @@ export default class FishingContainer extends React.Component {
 			return;
 		let areas = FishCreator.getAreasDropdownInfo(this.state.maxTier);
 		return (
-			<Dropdown className="dropdown" options={areas} onChange={this.moveArea.bind(this)} value={FishCreator.getArea(this.tier)} placeholder="Select an option" />
+			<Dropdown className="dropdown" options={areas} onChange={this.moveArea.bind(this)} value={this.state.location} placeholder="Select an option" />
 		);
 	}
 
@@ -129,3 +159,6 @@ export default class FishingContainer extends React.Component {
 		return this.createLeftContainer();
 	}
 }
+
+const FishingContainer = connect(mapStateToProps) (ConnectedFishingContainer);
+export default FishingContainer;

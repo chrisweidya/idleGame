@@ -1,7 +1,16 @@
 import {articles} from './constants';
+import {locationsEnum} from './constants';
+import FishCreator from '../fishCreator';
 
 const initialState = {
 	articles: [],
+	location: {
+		total: 3,
+		locationList: FishCreator.getAreasDropdownInfo(location.total),
+		tier: 1,
+		currlocation: FishCreator.getArea(location.tier)
+	},
+	fish: FishCreator.getFish(1),
 	settings: {
 		messageSize: 3
 	},
@@ -23,6 +32,10 @@ const rootReducer = (state = initialState, action) => {
 		case articles.INCREASE_STR: {			
 			res = { ...state, stats: {...state.stats, str: action.newStr, strCost: action.newStrCost, gold: action.newGold}, messages: action.newMessages};
 			//console.log(res);
+			return res;
+		}
+		case articles.CHANGE_LOCATION: {
+			res = {...state, location: action.newLocation};
 			return res;
 		}
 		case articles.ADD_MESSAGE: {

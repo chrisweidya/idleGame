@@ -10,7 +10,6 @@ export default class Box extends React.Component {
 		this.state = {
 			type: props.type,
 			name: props.name,
-			index: props.index,
 			className: "box",
 			startTime: Date.now(), //unused
 			cooldown: 60, //unused

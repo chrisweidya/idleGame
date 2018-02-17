@@ -2,25 +2,39 @@ import {articles} from './constants';
 import {locationsEnum} from './constants';
 import FishCreator from '../fishCreator';
 
-const initialState = {
-	articles: [],
-	location: {
-		total: 3,
-		locationList: FishCreator.getAreasDropdownInfo(location.total),
-		tier: 1,
-		currlocation: FishCreator.getArea(location.tier)
-	},
-	fish: FishCreator.getFish(1),
-	settings: {
-		messageSize: 3
-	},
-	stats: {
-		str: 1,
-		strCost: 5,
-		gold: 10
-	},
-	messages: ["It's a hot sunny day.", "You take your fishing pole and cast it out.", "Ah, nothing like a day of fishing."]
+
+const initState = () => {
+	let locationTotal = 3;
+	let locationTier = 1;
+
+	let location = {
+		total: locationTotal,
+		locationList: FishCreator.getAreasDropdownInfo(locationTotal),
+		tier: locationTier,
+		currLocation: FishCreator.getArea(locationTier)		
+	};
+	let fish  = FishCreator.getFish(locationTier);
+
+	return {
+		articles: [],
+		location: location,
+		fish: fish,
+		caughtFishes: {},
+		settings: {
+			messageSize: 3,
+			barDereaseInterval: 2000
+		},
+		stats: {
+			str: 1,
+			passiveStr: 1,
+			strCost: 5,
+			gold: 10
+		},
+		messages: ["It's a hot sunny day.", "You take your fishing pole and cast it out.", "Ah, nothing like a day of fishing."]
+	}
 };
+
+const initialState = initState();
 
 const rootReducer = (state = initialState, action) => {
 	let res;
@@ -40,6 +54,14 @@ const rootReducer = (state = initialState, action) => {
 		}
 		case articles.ADD_MESSAGE: {
 			res = { ...state, messages: action.newMessages};
+			return res;
+		}
+		case articles.CATCH_FISH: {
+			res = {...state, caughtFishes: action.caughtFishes, messages: action.newMessages, fish: action.nextFish};
+			return res;
+		}
+		case articles.REEL_FISH: {
+			res = {...state, fish: {...state.fish, health: action.newHealth}};
 			return res;
 		}
 		default:

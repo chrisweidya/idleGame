@@ -7,7 +7,8 @@ const fishItemClassName = "fish-item";
 
 const mapStateToProps = state => {
 	return {
-		gold: state.stats.gold
+		gold: state.stats.gold,
+		caughtFishes: state.caughtFishes
 	};
 }
 class ConnectedInventoryContainer extends React.Component {
@@ -20,7 +21,7 @@ class ConnectedInventoryContainer extends React.Component {
 			gold: props.gold,
 			maxWeight: 5,
 			currentWeight: 0,
-			fishes: {},
+			caughtFishes: props.caughtFishes,
 
 			updateMessage: props.updateMessage
 		}
@@ -38,13 +39,14 @@ class ConnectedInventoryContainer extends React.Component {
 
 	componentWillReceiveProps(props) {
 		this.state.gold = props.gold;
+		this.state.caughtFishes = props.caughtFishes;
 	}
 
 	sellFish(fishName, count) {
-		let fishes = this.state.fishes;
-		fishes[fishName] = 0;
+		let caughtFishes = this.state.caughtFishes;
+		caughtFishes[fishName] = 0;
 		this.setState({
-			fishes: fishes
+			caughtFishes: caughtFishes
 		});
 		this.updateGold(FishCreator.getFishGold(fishName)*count);
 	}
@@ -69,6 +71,7 @@ class ConnectedInventoryContainer extends React.Component {
 */
 
 	updateInventory(fish) {
+		/*
 		this.state.updateMessage("You received 1 " + fish.name + ".");
 		let fishes = this.state.fishes;
 		if(!fishes[fish.name])
@@ -78,6 +81,7 @@ class ConnectedInventoryContainer extends React.Component {
 		this.setState({
 			fishes: fishes
 		});
+		*/
 	}
 
 	createInventoryContainer() {
@@ -97,8 +101,8 @@ class ConnectedInventoryContainer extends React.Component {
 	}
 
 	createFishList() {
-		let fishes = Object.entries(this.state.fishes);
-		fishes = fishes.map((fish, index) => {
+		let caughtFishes = Object.entries(this.state.caughtFishes);
+		caughtFishes = caughtFishes.map((fish, index) => {
 			if(fish[1] === 0)
 				return;
 			if(this.state.location === "fishing")
@@ -114,7 +118,7 @@ class ConnectedInventoryContainer extends React.Component {
 					</div>
 				);
 		});
-		return fishes;
+		return caughtFishes;
 	}
 
 	render() {

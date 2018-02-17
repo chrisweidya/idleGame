@@ -9,13 +9,10 @@ const fishingContainerClassName = "left container";
 const mapStateToProps = state => {
 	return {
 		location: state.location.currLocation,
-		tier: state.location.tier,
-		fish: state.fish
 	};
 };
 
-const mapDispatchToProps = dispatch => ({
-});
+
 
 class ConnectedFishingContainer extends React.Component {
 
@@ -29,15 +26,8 @@ class ConnectedFishingContainer extends React.Component {
 		super(props);
 		this.state = {
 			title: props.location,
-			clickPower: props.str,
 			intervalDecrease: 1,
-			slots: [],
-			fish: props.fish,
-			tier: props.tier,
-
-			updateGold: props.updateGold,
-			updateMessage: props.updateMessage,
-			updateInventory: props.updateInventory
+			slots: []
 		}
 	}
 
@@ -47,25 +37,21 @@ class ConnectedFishingContainer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.state.location = nextProps.location;
-		this.state.tier = nextProps.tier;
-		this.state.fish = nextProps.fish;
-		console.log(props);
-		this.setState({
-			clickPower: props.str 
-		});
+		this.state.title = nextProps.location;
 	}
-
+/*
 	getNextFish(killed) {
 		if(killed) {
-			this.state.updateInventory(this.state.fish);
+			this.props.catchFish(this.state.fish);
 		}
-		let nextFish = FishCreator.getFish(this.tier);
+		
+		let nextFish = FishCreator.getFish(this.state.tier);
 		this.state.slots[0] = nextFish;
 		this.setState({
 			slots: this.state.slots
 		});
 	}
+	*/
 
 	sendFishKilledMessage(fish, gold) {
 		let message = "You got a " + fish + "! Sold it for " + gold + " gold.";
@@ -123,14 +109,7 @@ class ConnectedFishingContainer extends React.Component {
 		});
 		*/
 		const boxes = (
-				<Box 
-					name={this.state.fish.name}
-					type={this.state.fish.type}
-					health={this.state.fish.health}
-					clickPower={this.state.clickPower}
-					intervalDecrease={this.state.intervalDecrease} 
-					getNextFish={this.getNextFish.bind(this)}
-					>
+				<Box>
 				</Box>
 			)
 		return boxes;
@@ -141,7 +120,7 @@ class ConnectedFishingContainer extends React.Component {
 			return;
 		let areas = FishCreator.getAreasDropdownInfo(this.state.maxTier);
 		return (
-			<Dropdown className="dropdown" options={areas} onChange={this.moveArea.bind(this)} value={this.state.location} placeholder="Select an option" />
+			<Dropdown className="dropdown" options={areas} onChange={this.moveArea.bind(this)} value={this.state.title} placeholder="Select an option" />
 		);
 	}
 

@@ -1,23 +1,35 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {reelFish} from './redux/actions'
 import Progress from 'react-progressbar';
 
 const barBgClassName = "bar-bg";
 
-export default class Box extends React.Component {
+const mapStateToProps = state => ({
+	fish: state.fish,
+	intervalDecrease: state.barDecreaseInterval,
+	fillAmount: state.fish.health/state.fish.maxHealth*100,
+	tier: state.location.tier,
+	str: state.stats.str
+});
+
+const mapDispatchToProps = dispatch => ({
+	reelFish: isPassive => dispatch(reelFish(isPassive))
+});
+
+class ConnectedBox extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			type: props.type,
-			name: props.name,
+			type: props.fish.type,
+			name: props.fish.name,
 			className: "box",
 			startTime: Date.now(), //unused
 			cooldown: 60, //unused
 			interval: 2000,
-			health: props.health,
-			currentHealth: props.health,
-			fillAmount: 100,
-			clickPower: props.clickPower,
+			fillAmount: props.fillAmount,
+			str: props.str,
 			intervalDecrease: props.intervalDecrease,
 			increaseClickPower: props.increaseClickPower,
 			getNextFish: props.getNextFish,
@@ -27,17 +39,21 @@ export default class Box extends React.Component {
 
 	componentDidMount() {
 		console.log("mounted");
-		setInterval(this.updateProgressBar.bind(this), this.state.interval);
+		setInterval(this.props.reelFish.bind(this), this.state.interval);
 	}
 
 	componentWillReceiveProps(nextProps) {
+		this.state.fillAmount = nextProps.fillAmount
+		
+		/*
 		this.setState({
 			name: nextProps.name,
 			type: nextProps.type,
 			health: nextProps.health,
 			currentHealth: nextProps.health,
 			clickPower: nextProps.clickPower
-		});		
+		});
+		*/
 	}
 
 	createBoxElement() {
@@ -54,7 +70,7 @@ export default class Box extends React.Component {
 	createProgressBar() {
 		//if(this.state.progressTimer === null)
 		//	return;
-		console.log("draw", this.state.fillAmount);
+		//console.log("draw", this.state);
 		return (
 			<div className={barBgClassName}>
 				<Progress completed={this.state.fillAmount} />
@@ -62,20 +78,7 @@ export default class Box extends React.Component {
 		);
 	}
 
-	updateProgressBar(clickPower) {
-		if(this.state.currentHealth <= 0)
-			return;
-		if(!clickPower)
-			clickPower = this.state.clickPower;
-		console.log(this.state.currentHealth);
-		this.state.currentHealth -= clickPower;
-		if(this.state.currentHealth <= 0) {
-			this.setState({fillAmount: 0});
-			this.handleDeadFish();
-		}
-		else {
-			this.setState({fillAmount: this.state.currentHealth/this.state.health*100});
-		}
+	updateProgressBar(str) {
 	}
 
 	handleDeadFish() {				
@@ -84,7 +87,7 @@ export default class Box extends React.Component {
 
 	buttonClicked() {
 		//this.state.increaseClickPower();
-		this.updateProgressBar(this.state.clickPower);
+		this.props.reelFish(false);
 	}
 
 	createButton() {
@@ -99,3 +102,6 @@ export default class Box extends React.Component {
 		return this.createBoxElement();
 	}
 }
+
+const Box = connect(mapStateToProps, mapDispatchToProps) (ConnectedBox);
+export default Box;

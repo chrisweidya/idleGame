@@ -18,6 +18,7 @@ class FishCreator {
 					name: "Angel Fish",
 					type: "fish",
 					health: 10,
+					maxHealth: 10,
 					gold: 5
 				},
 				{	
@@ -25,6 +26,7 @@ class FishCreator {
 					name: "Gold Fish",
 					type: "fish",
 					health: 20,
+					maxHealth: 20,
 					gold: 10
 				},
 				{
@@ -32,6 +34,7 @@ class FishCreator {
 					name: "Black Molly",
 					type: "fish",
 					health: 60,
+					maxHealth: 60,
 					gold: 20
 				},
 				{
@@ -39,6 +42,7 @@ class FishCreator {
 					name: "Black Skirt Tetra",
 					type: "fish",
 					health: 70,
+					maxHealth: 70,
 					gold: 40
 				},
 				{
@@ -46,6 +50,7 @@ class FishCreator {
 					name: "Kuhli Loach",
 					type: "fish",
 					health: 50,
+					maxHealth: 50,
 					gold: 10
 				},
 				{
@@ -53,6 +58,7 @@ class FishCreator {
 					name: "Betta",
 					type: "fish",
 					health: 40,
+					maxHealth: 40,
 					gold: 15
 				}
 			],
@@ -62,6 +68,7 @@ class FishCreator {
 					name: "Electric Eel",
 					type: "fish",
 					health: 150,
+					maxHealth: 150,
 					gold: 110
 				},
 				{
@@ -69,6 +76,7 @@ class FishCreator {
 					name: "Shark",
 					type: "fish",
 					health: 200,
+					maxHealth: 200,
 					gold: 180
 				},
 				{
@@ -76,6 +84,7 @@ class FishCreator {
 					name: "Killer Whale",
 					type: "fish",
 					health: 250,
+					maxHealth: 250,
 					gold: 220
 				}
 			],
@@ -85,6 +94,7 @@ class FishCreator {
 					name: "Poseidon, God of the Sea",
 					type: "fish",
 					health: 10000,
+					maxHealth: 10000,
 					gold: 80000
 				}
 			]
@@ -105,8 +115,8 @@ class FishCreator {
 
 	getFish(tier) {
 		tier -= 1;
-		console.log(tier);
-		return this.fishes[tier][Math.floor(Math.random()*this.fishes[tier].length)];
+		let fish = {...this.fishes[tier][Math.floor(Math.random()*this.fishes[tier].length)]};
+		return fish;
 	}
 
 	getFishGold(fishName) {

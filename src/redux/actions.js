@@ -31,6 +31,38 @@ export const changeLocation = location => {
 	};
 };
 
+export const catchFish = () => {
+	let currState = store.getState();
+	let messages = addMessage("You received 1 " + fish.name + ".").newMessages;
+	let caughtFishes = {...currState.caughtFishes};
+	let nextFish = FishCreator.getFish(currState.location.tier);
+	let fish = currState.fish;
+	if(!caughtFishes[fish.name])
+		caughtFishes[fish.name] = 1;
+	else
+		caughtFishes[fish.name] += 1;
+	return {
+		type: articles.CATCH_FISH, caughtFishes: caughtFishes, newMessages: messages, nextFish: nextFish
+	};
+};
+
+export const reelFish = isPassive => {
+	let currState = store.getState();
+	let str = currState.stats.str;
+	if(isPassive)
+		str = currState.stats.passiveStr;
+	if(currState.fish.health <= 0) {
+		return catchFish();
+	}
+	else {
+		let health;
+		health = Math.max(currState.fish.health - str, 0);
+		return {
+			type: articles.REEL_FISH, newHealth: health
+		};
+	}
+};
+
 export const addMessage = message => {
 	let currState = store.getState();
 	let messages = [...currState.messages];	

@@ -80,7 +80,7 @@ export default class MainContainer extends React.Component {
 			<div className={mainContainerClassName}>
 				<TopContainer>
 				</TopContainer>
-				<FishingContainer ref="fishingContainer" updateGold={this.updateGold.bind(this)} str={this.state.stats.str} updateMessage={this.updateMessage.bind(this)} updateInventory={this.updateInventory.bind(this)}>
+				<FishingContainer updateMessage={this.updateMessage.bind(this)} updateInventory={this.updateInventory.bind(this)}>
 				</FishingContainer>
 				<BuyContainer>
 				</BuyContainer>

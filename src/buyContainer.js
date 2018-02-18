@@ -8,12 +8,12 @@ const fishItemClassName = "fish-item";
 const mapStateToProps = state => {
 	return { 
 		strCost: state.stats.strCost 
-	};
+	}
 }
 
 const mapDispatchToProps = dispatch => ({
 	increaseStr: payload => dispatch(increaseStr(payload))
-});
+})
 
 class ConnectedBuyContainer extends React.Component {
 

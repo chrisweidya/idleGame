@@ -21,9 +21,13 @@ const initState = () => {
 		location: location,
 		fish: fish,
 		caughtFishes: {},
+		inventory: {
+			title: 'Items'
+		},
 		settings: {
 			messageSize: 3,
-			barDereaseInterval: 2000
+			barDecreaseInterval: 2000,
+			difficultyMultiplier: 1.5
 		},
 		stats: {
 			str: 1,
@@ -63,6 +67,10 @@ const rootReducer = (state = initialState, action) => {
 		}
 		case articles.CATCH_FISH: {
 			res = {...state, caughtFishes: action.caughtFishes, messages: action.newMessages, fish: action.nextFish};
+			return res;
+		}
+		case articles.SELL_FISH: {
+			res = {...state, caughtFishes: action.newCaughtFishes, stats: {...state.stats, gold: action.newGold}, messages: action.newMessages};
 			return res;
 		}
 		case articles.REEL_FISH: {

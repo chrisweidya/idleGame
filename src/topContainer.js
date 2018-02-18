@@ -9,7 +9,7 @@ const mapStateToProps = state => {
 		messageSize: state.settings.messageSize,
 		messages: state.messages
 	};
-};
+}
 
 class ConnectedTopContainer extends React.Component {
 

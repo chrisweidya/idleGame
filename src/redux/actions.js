@@ -6,8 +6,6 @@ import FishCreator from '../fishCreator.js';
 
 'use strict';
 
-console.log(articles);
-
 export const addArticle = article => ({ type: articles.ADD_ARTICLE, payload: article });
 
 export const increaseStr = () => {
@@ -17,7 +15,7 @@ export const increaseStr = () => {
 	let messages;
 	if(gold >= strCost) {
 		gold -= strCost;
-		strCost *= 2;
+		strCost = Math.ceil(strCost * currState.settings.difficultyMultiplier);
 		let str = currState.stats.str + 1;
 		messages = addMessage(messagesEnum.INCREASE_STR).newMessages;
 		return { 
@@ -68,8 +66,19 @@ export const reelFish = isPassive => {
 	}
 }
 
-export const changeLocation = tier => {
+export const sellFish = fishName => {
 	let currState = store.getState();
+	let caughtFishes = {...currState.caughtFishes};
+	let count = caughtFishes[fishName];
+	let value = count*FishCreator.getFishGold(fishName);
+	let messages = addMessage("Sold " + count + " " + fishName + " for " + value + " gold.").newMessages;
+	caughtFishes[fishName] = 0;
+	return {
+		type: articles.SELL_FISH, newCaughtFishes: caughtFishes, newGold: currState.stats.gold + value, newMessages: messages
+	}
+}
+
+export const changeLocation = tier => {
 	let location = FishCreator.getArea(tier);
 	console.log(tier);
 	return {

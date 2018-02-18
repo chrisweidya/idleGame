@@ -7,7 +7,7 @@ const barBgClassName = "bar-bg";
 
 const mapStateToProps = state => ({
 	fish: state.fish,
-	intervalDecrease: state.barDecreaseInterval,
+	intervalDecrease: state.settings.barDecreaseInterval,
 	fillAmount: state.fish.health/state.fish.maxHealth*100,
 	tier: state.location.tier,
 	str: state.stats.str
@@ -27,33 +27,22 @@ class ConnectedBox extends React.Component {
 			className: "box",
 			startTime: Date.now(), //unused
 			cooldown: 60, //unused
-			interval: 2000,
 			fillAmount: props.fillAmount,
 			str: props.str,
 			intervalDecrease: props.intervalDecrease,
 			increaseClickPower: props.increaseClickPower,
-			getNextFish: props.getNextFish,
-			number: 0 //unused
+			getNextFish: props.getNextFish
 		}
 	}
 
 	componentDidMount() {
 		console.log("mounted");
-		setInterval(this.props.reelFish.bind(this), this.state.interval);
+		setInterval(this.props.reelFish.bind(this), this.state.intervalDecrease);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.state.fillAmount = nextProps.fillAmount
-		
-		/*
-		this.setState({
-			name: nextProps.name,
-			type: nextProps.type,
-			health: nextProps.health,
-			currentHealth: nextProps.health,
-			clickPower: nextProps.clickPower
-		});
-		*/
+		this.state.fillAmount = nextProps.fillAmount;
+		this.state.name = nextProps.fish.name;
 	}
 
 	createBoxElement() {

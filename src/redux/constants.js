@@ -5,6 +5,7 @@ export const articles = {
 	ADD_MESSAGE: 'ADD_MESSAGE',
 	RESET_FISH: 'RESET_FISH',
 	CATCH_FISH: 'CATCH_FISH',
+	SELL_FISH: 'SELL_FISH',
 	REEL_FISH: 'REEL_FISH'
 };
 

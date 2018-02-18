@@ -2,6 +2,7 @@ import {articles} from './constants';
 import {locationsEnum} from './constants';
 import FishCreator from '../fishCreator';
 
+'use strict';
 
 const initState = () => {
 	let locationTotal = 3;
@@ -49,11 +50,15 @@ const rootReducer = (state = initialState, action) => {
 			return res;
 		}
 		case articles.CHANGE_LOCATION: {
-			res = {...state, location: action.newLocation};
+			res = {...state, location: {...state.location, currLocation: action.newLocation, tier: action.newTier}};
 			return res;
 		}
 		case articles.ADD_MESSAGE: {
 			res = { ...state, messages: action.newMessages};
+			return res;
+		}
+		case articles.RESET_FISH: {
+			res = {...state, fish: action.newFish}
 			return res;
 		}
 		case articles.CATCH_FISH: {

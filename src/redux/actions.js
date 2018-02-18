@@ -1,7 +1,10 @@
 import store from './store';
 import {articles} from './constants';
 import {messagesEnum} from './constants';
+import {locationsEnum} from './constants';
 import FishCreator from '../fishCreator.js';
+
+'use strict';
 
 console.log(articles);
 
@@ -19,21 +22,23 @@ export const increaseStr = () => {
 		messages = addMessage(messagesEnum.INCREASE_STR).newMessages;
 		return { 
 			type: articles.INCREASE_STR, newStr: str, newStrCost: strCost, newGold: gold, newMessages: messages
-		};
+		}
 	}
 	else
 		return addMessage(messagesEnum.INSUFFICIENT_GOLD);
-};
+}
 
-export const changeLocation = location => {
+export const resetFish = () => {
+	let currState = store.getState();
+	let nextFish = FishCreator.getFish(currState.location.tier);
 	return {
-		type: articles.CHANGE_LOCATION, newLocation: location
-	};
-};
+		type: articles.RESET_FISH, newFish: nextFish
+	}
+}
 
 export const catchFish = () => {
 	let currState = store.getState();
-	let messages = addMessage("You received 1 " + fish.name + ".").newMessages;
+	let messages = addMessage("You received 1 " + currState.fish.name + ".").newMessages;
 	let caughtFishes = {...currState.caughtFishes};
 	let nextFish = FishCreator.getFish(currState.location.tier);
 	let fish = currState.fish;
@@ -43,8 +48,8 @@ export const catchFish = () => {
 		caughtFishes[fish.name] += 1;
 	return {
 		type: articles.CATCH_FISH, caughtFishes: caughtFishes, newMessages: messages, nextFish: nextFish
-	};
-};
+	}
+}
 
 export const reelFish = isPassive => {
 	let currState = store.getState();
@@ -59,9 +64,18 @@ export const reelFish = isPassive => {
 		health = Math.max(currState.fish.health - str, 0);
 		return {
 			type: articles.REEL_FISH, newHealth: health
-		};
+		}
 	}
-};
+}
+
+export const changeLocation = tier => {
+	let currState = store.getState();
+	let location = FishCreator.getArea(tier);
+	console.log(tier);
+	return {
+		type: articles.CHANGE_LOCATION, newLocation: location, newTier: tier
+	}
+}
 
 export const addMessage = message => {
 	let currState = store.getState();
@@ -72,5 +86,5 @@ export const addMessage = message => {
 	messages.push(message);
 	return {
 		type: articles.ADD_MESSAGE, newMessages: messages
-	};
-};
+	}
+}

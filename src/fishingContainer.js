@@ -1,5 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {changeLocation} from './redux/actions';
+import {resetFish} from './redux/actions';
 import Dropdown from 'react-dropdown';
 import Box from './box.js';
 import FishCreator from './fishCreator.js';
@@ -12,7 +14,12 @@ const mapStateToProps = state => {
 	};
 };
 
-
+const mapDispatchToProps = dispatch => {
+	return {
+		changeLocation: tier => dispatch(changeLocation(tier)),
+		resetFish: () => dispatch(resetFish())
+	}
+}
 
 class ConnectedFishingContainer extends React.Component {
 
@@ -75,12 +82,16 @@ class ConnectedFishingContainer extends React.Component {
 	}
 
 	moveArea(tier) {
+		/*
 		console.log("tier: ", tier);
 		this.tier = tier.value;
 		this.setState({
 			title: FishCreator.getArea(this.state.tier)
 		});
 		this.getNextFish(false);
+		*/
+		this.props.changeLocation(tier.value);
+		this.props.resetFish();
 	}
 
 	insertBox(slots, slot){
@@ -109,9 +120,9 @@ class ConnectedFishingContainer extends React.Component {
 		});
 		*/
 		const boxes = (
-				<Box>
-				</Box>
-			)
+			<Box>
+			</Box>
+		)
 		return boxes;
 	}
 
@@ -139,5 +150,5 @@ class ConnectedFishingContainer extends React.Component {
 	}
 }
 
-const FishingContainer = connect(mapStateToProps) (ConnectedFishingContainer);
+const FishingContainer = connect(mapStateToProps, mapDispatchToProps) (ConnectedFishingContainer);
 export default FishingContainer;

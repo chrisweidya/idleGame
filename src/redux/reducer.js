@@ -33,7 +33,7 @@ const initState = () => {
 			str: 1,
 			passiveStr: 1,
 			strCost: 5,
-			gold: 10
+			gold: 0
 		},
 		messages: ["It's a hot sunny day.", "You take your fishing pole and cast it out.", "Ah, nothing like a day of fishing."]
 	}
